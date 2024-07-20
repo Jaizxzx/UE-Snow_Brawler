@@ -2,6 +2,7 @@
 
 
 #include "TiProjectile.h"
+#include "TiCharacter.h"
 
 // Sets default values
 ATiProjectile::ATiProjectile()
@@ -39,9 +40,11 @@ void ATiProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	m_timeSinceSpawn += DeltaTime;
-	if (m_timeSinceSpawn > m_Lifetime)
+
+	if (m_timeSinceSpawn> m_Lifetime)
 	{
 		Destroy();
+
 	}
 }
 
@@ -56,3 +59,33 @@ void ATiProjectile::OnConstruction(const FTransform& Transform)
 
 }
 
+
+// Called when the projectile hits something
+void ATiProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+{
+	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+	
+	//Check if the hit Actor is of TiCharacter class
+
+	ATiCharacter* characterActor = Cast<ATiCharacter>(Other);
+
+	if (characterActor)
+	{
+		DealDamage(characterActor);
+	}
+}
+
+void ATiProjectile::DealDamage(ATiCharacter* CharacterActor)
+{
+	DestroyProjectile();
+	if (CharacterActor)
+	{
+		CharacterActor->TakeDamage(m_Damage);
+	}
+
+}
+
+void ATiProjectile::DestroyProjectile()
+{
+	Destroy();
+}
