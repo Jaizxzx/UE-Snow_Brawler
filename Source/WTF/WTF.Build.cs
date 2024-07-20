@@ -1,5 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+using System.IO;
 using UnrealBuildTool;
 
 public class WTF : ModuleRules
@@ -9,5 +10,9 @@ public class WTF : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
-	}
+
+        PublicIncludePaths.AddRange(new string[] {
+            Path.Combine(ModuleDirectory, "Projectile")
+        });
+    }
 }
