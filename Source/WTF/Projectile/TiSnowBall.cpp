@@ -26,17 +26,24 @@ void ATiSnowBall::Tick(float DeltaTime)
 
 	if (m_bIsOnFloor)
 	{
-		FVector Velocity = m_projectileMovementComp->Velocity;
-		float Speed = Velocity.Size();
-
-		if (Speed >= m_minSpeedForScaling)
+		if (m_snowballMesh)
 		{
+			FVector Velocity = m_snowballMesh->GetComponentVelocity();
+			float Speed = Velocity.Size();
 
-			// Increase the scale over time
-			FVector NewScale = GetActorScale3D();
-			NewScale += FVector(m_ScaleIncreaseRate * DeltaTime);
-			SetActorScale3D(NewScale);
-			m_bIsOnFloor = false;
+			if (Speed >= m_minSpeedForScaling)
+			{
+
+				FVector OldScale = GetActorScale3D();
+				SetActorScale3D(OldScale * m_ScaleMultiplier);
+
+
+				FVector NewScale = GetActorScale3D();
+				// Adjust position to ensure the actor stays above the floor
+				AdjustPositionAfterScaling(OldScale, NewScale);
+
+				m_bIsOnFloor = false;
+			}
 		}
 	}
 
@@ -45,18 +52,31 @@ void ATiSnowBall::Tick(float DeltaTime)
 }
 
 
+void ATiSnowBall::AdjustPositionAfterScaling(const FVector& OldScale, const FVector& NewScale)
+{
+	FVector CurrentLocation = GetActorLocation();
+
+	// Calculate the height difference
+	float HeightDifference = (NewScale.Z - OldScale.Z) * 0.5f;
+
+	// Adjust the actor’s position
+	FVector NewLocation = CurrentLocation + FVector(0.0f, 0.0f, HeightDifference);
+	SetActorLocation(NewLocation);
+}
+
+
 // Called after components have been initialized
 void ATiSnowBall::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
-	UStaticMeshComponent* SnowballMesh = GetComponentByClass<UStaticMeshComponent>();
-	if (SnowballMesh)
+	m_snowballMesh = GetComponentByClass<UStaticMeshComponent>();
+	if (m_snowballMesh)
 	{
 		// Set collision properties
-		SnowballMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		SnowballMesh->SetCollisionResponseToAllChannels(ECR_Block);
-		SnowballMesh->SetNotifyRigidBodyCollision(true);
+		m_snowballMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		m_snowballMesh->SetCollisionResponseToAllChannels(ECR_Block);
+		m_snowballMesh->SetNotifyRigidBodyCollision(true);
 	}
 
 }

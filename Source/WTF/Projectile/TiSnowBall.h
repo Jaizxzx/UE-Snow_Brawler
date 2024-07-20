@@ -30,15 +30,19 @@ public:
 
 	// Called when the projectile hits something
 	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
-
+	
+	virtual void AdjustPositionAfterScaling(const FVector& OldScale, const FVector& NewScale);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Scaling")
-	float m_ScaleIncreaseRate;
+	float m_ScaleMultiplier;
 
 	UPROPERTY(EditAnywhere)
 	float m_minSpeedForScaling = 20.0f;
 
+private:
 	// Check if projectile is on the floor
 	bool m_bIsOnFloor;
+	UStaticMeshComponent* m_snowballMesh;
+
 };
