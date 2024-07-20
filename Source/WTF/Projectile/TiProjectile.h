@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+#include <GameFramework/ProjectileMovementComponent.h>
 #include "TiProjectile.generated.h"
 
 UCLASS()
@@ -23,6 +25,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Override PostInitializeComponents
+	virtual void OnConstruction(const FTransform& Transform) override;
+
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
@@ -34,4 +39,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 		int m_Lifetime;
 	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	UProjectileMovementComponent* m_projectileMovementComp;
+
+
+private:
+
+	float m_timeSinceSpawn;
 };
