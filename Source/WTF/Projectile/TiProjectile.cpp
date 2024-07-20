@@ -39,11 +39,9 @@ void ATiProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	m_timeSinceSpawn += DeltaTime;
-
-	if (m_timeSinceSpawn> m_Lifetime)
+	if (m_timeSinceSpawn > m_Lifetime)
 	{
 		Destroy();
-
 	}
 }
 

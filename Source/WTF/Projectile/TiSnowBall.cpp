@@ -8,16 +8,8 @@ ATiSnowBall::ATiSnowBall() :ATiProjectile()
 
 	m_bIsOnFloor = false;
 
-	
-
 }
 
-// Called when the game starts or when spawned
-void ATiSnowBall::BeginPlay()
-{
-	Super::BeginPlay();
-
-}
 
 // Called every frame
 void ATiSnowBall::Tick(float DeltaTime)
@@ -26,24 +18,21 @@ void ATiSnowBall::Tick(float DeltaTime)
 
 	if (m_bIsOnFloor)
 	{
-		if (m_snowballMesh)
-		{
-			FVector Velocity = m_snowballMesh->GetComponentVelocity();
-			float Speed = Velocity.Size();
+		FVector Velocity = m_projectileMovementComp->Velocity;	
+		float Speed = Velocity.Size();
 
-			if (Speed >= m_minSpeedForScaling)
-			{
-
-				FVector OldScale = GetActorScale3D();
-				SetActorScale3D(OldScale * m_ScaleMultiplier);
+		if (Speed >= m_minSpeedForScaling) {
+			ChangeScale();
+			//FVector OldScale = GetActorScale3D();
+			//UE_LOG(LogTemp, Warning, TEXT("Old Scale: %s"), *OldScale.ToString());
+			//SetActorScale3D(OldScale * m_ScaleMultiplier);
 
 
-				FVector NewScale = GetActorScale3D();
-				// Adjust position to ensure the actor stays above the floor
-				AdjustPositionAfterScaling(OldScale, NewScale);
+			//FVector NewScale = GetActorScale3D();
+			//// Adjust position to ensure the actor stays above the floor
+			//AdjustPositionAfterScaling(OldScale, NewScale);
 
-				m_bIsOnFloor = false;
-			}
+			m_bIsOnFloor = false;
 		}
 	}
 
@@ -52,50 +41,18 @@ void ATiSnowBall::Tick(float DeltaTime)
 }
 
 
-void ATiSnowBall::AdjustPositionAfterScaling(const FVector& OldScale, const FVector& NewScale)
-{
-	FVector CurrentLocation = GetActorLocation();
-
-	// Calculate the height difference
-	float HeightDifference = (NewScale.Z - OldScale.Z) * 0.5f;
-
-	// Adjust the actor’s position
-	FVector NewLocation = CurrentLocation + FVector(0.0f, 0.0f, HeightDifference);
-	SetActorLocation(NewLocation);
-}
-
 
 // Called after components have been initialized
 void ATiSnowBall::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
-	m_snowballMesh = GetComponentByClass<UStaticMeshComponent>();
-	if (m_snowballMesh)
-	{
-		// Set collision properties
-		m_snowballMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		m_snowballMesh->SetCollisionResponseToAllChannels(ECR_Block);
-		m_snowballMesh->SetNotifyRigidBodyCollision(true);
-	}
-
 }
 
 
-// Called when the projectile hits something
-void ATiSnowBall::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
-{
-	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
-
-	;
-	for (auto tag : Other->Tags)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tag on hit actor: %s"), *tag.ToString());
-	}
-
+void ATiSnowBall::checkIfOnFloor(AActor* Other) {
 	// Check if the hit object is the floor
-	if (Other->ActorHasTag(FName("Floor")))
-	{
+	if (Other->ActorHasTag(FName("Floor"))) {
 		m_bIsOnFloor = true;
 	}
 }
