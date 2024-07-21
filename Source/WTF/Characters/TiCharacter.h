@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "../WTFCharacter.h"
 #include "TiCharacter.generated.h"
 
 UCLASS()
-class WTF_API ATiCharacter : public ACharacter
+class WTF_API ATiCharacter : public AWTFCharacter
 {
 	GENERATED_BODY()
 
@@ -24,8 +25,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void TakeDamage(float Damage);
 

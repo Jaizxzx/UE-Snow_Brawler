@@ -30,12 +30,6 @@ void ATiCharacter::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
-void ATiCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
 
 void ATiCharacter::TakeDamage(float Damage)
 {
