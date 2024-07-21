@@ -2,6 +2,8 @@
 
 
 #include "GravityAffector.h"
+#include "TiCharacterPlayer.h"
+
 
 // Sets default values
 AGravityAffector::AGravityAffector()
@@ -9,6 +11,12 @@ AGravityAffector::AGravityAffector()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+}
+
+void AGravityAffector::SetIsGravityAffected(bool isAffected)
+{
+
+	m_isGravityAffected = isAffected;
 }
 
 // Called when the game starts or when spawned
@@ -41,24 +49,38 @@ void AGravityAffector::RemoveActorFromMap(AActor* ActorToAdd)
 
 }
 
+void AGravityAffector::UseNextTarget()
+{
+	if (m_playerCharacter)
+	{
+		m_playerCharacter->m_TargetGravityActor = m_EndTargetGravityActor;
+		m_affectedActorMap.clear();
+	}
+}
+
 // Called every frame
 void AGravityAffector::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	for (auto pair : m_affectedActorMap)
 	{
-
-		if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(pair.second->GetRootComponent()))
+		if (pair.second)
 		{
-			if (PrimitiveComponent->IsSimulatingPhysics())
+			if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(pair.second->GetRootComponent()))
 			{
-				PrimitiveComponent->SetEnableGravity(false);
-				float gravityScale = GetGravityZ();
+				if (PrimitiveComponent->IsSimulatingPhysics())
+				{
+					PrimitiveComponent->SetEnableGravity(false);
+					float gravityScale = GetGravityZ();
 
-				FVector gravityDirection = (pair.second->GetActorLocation()- m_OnTargetGravityActor->GetActorLocation()).GetSafeNormal();
-				PrimitiveComponent->AddForce(gravityDirection * PrimitiveComponent->GetMass() * gravityScale);
+					FVector gravityDirection = (pair.second->GetActorLocation() - m_OnTargetGravityActor->GetActorLocation()).GetSafeNormal();
+					PrimitiveComponent->AddForce(gravityDirection * PrimitiveComponent->GetMass() * gravityScale);
+				}
 			}
+		}
+		else
+		{
+			m_affectedActorMap.erase(pair.first);
 		}
 	}
 

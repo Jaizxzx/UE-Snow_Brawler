@@ -34,7 +34,10 @@ public:
 	virtual void AdjustPositionAfterScaling(const FVector& OldScale, const FVector& NewScale);
 
 
-	virtual void DestroyProjectile() override;
+protected: 
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DestroyProjectile();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Scaling")

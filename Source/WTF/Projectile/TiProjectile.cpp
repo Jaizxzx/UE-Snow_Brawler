@@ -43,7 +43,7 @@ void ATiProjectile::Tick(float DeltaTime)
 
 	if (m_timeSinceSpawn> m_Lifetime)
 	{
-		Destroy();
+		DestroyProjectile();
 
 	}
 }

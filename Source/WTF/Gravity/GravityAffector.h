@@ -7,6 +7,8 @@
 #include <map>
 #include "GravityAffector.generated.h"
 
+
+class ATiCharacterPlayer;
 UCLASS()
 class WTF_API AGravityAffector : public AActor
 {
@@ -15,6 +17,9 @@ class WTF_API AGravityAffector : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AGravityAffector();
+
+	UFUNCTION(BlueprintCallable)
+		virtual void SetIsGravityAffected(bool isAffected);
 
 protected:
 	// Called when the game starts or when spawned
@@ -30,8 +35,10 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	virtual void RemoveActorFromMap(AActor* ActorToAdd);
 
-
 	
+
+	UFUNCTION(BlueprintCallable)
+		virtual void UseNextTarget();
 
 public:	
 	// Called every frame
@@ -46,5 +53,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		AActor* m_EndTargetGravityActor;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		ATiCharacterPlayer* m_playerCharacter;
+
+private:
+	bool m_isGravityAffected;
 
 };
