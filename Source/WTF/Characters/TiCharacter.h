@@ -31,7 +31,14 @@ public:
 
 	virtual void DestroyPlayer();
 
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AActor* m_TargetGravityActor;
+
 private:
+
 	float m_health =100.0f;
 
 

@@ -35,13 +35,15 @@ void ATiSnowBall::Tick(float DeltaTime)
 			{
 
 				FVector OldScale = GetActorScale3D();
-				SetActorScale3D(OldScale * m_ScaleMultiplier);
 
-
-				FVector NewScale = GetActorScale3D();
-				// Adjust position to ensure the actor stays above the floor
-				AdjustPositionAfterScaling(OldScale, NewScale);
-
+				FVector NewScale = OldScale * m_ScaleMultiplier;
+				float scaleSize = NewScale.X;
+				if (scaleSize <m_maxScale)
+				{
+					SetActorScale3D(NewScale);
+					// Adjust position to ensure the actor stays above the floor
+					AdjustPositionAfterScaling(OldScale, NewScale);
+				}
 				m_bIsOnFloor = false;
 			}
 		}

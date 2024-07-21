@@ -38,7 +38,10 @@ protected:
 	float m_ScaleMultiplier;
 
 	UPROPERTY(EditAnywhere)
-	float m_minSpeedForScaling = 20.0f;
+		float m_minSpeedForScaling = 20.0f;
+
+	UPROPERTY(EditAnywhere)
+	float m_maxScale= 4.0f;
 
 private:
 	// Check if projectile is on the floor
