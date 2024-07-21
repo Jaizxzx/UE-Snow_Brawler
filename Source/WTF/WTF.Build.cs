@@ -13,8 +13,7 @@ public class WTF : ModuleRules
 
         PublicIncludePaths.AddRange(new string[] {
             Path.Combine(ModuleDirectory, "Projectile"),
-            Path.Combine(ModuleDirectory, "Characters"),
-            Path.Combine(ModuleDirectory, "Gravity"),
+            Path.Combine(ModuleDirectory, "Characters")
         });
     }
 }
