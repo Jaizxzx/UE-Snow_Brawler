@@ -56,7 +56,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		ATiCharacterPlayer* m_playerCharacter;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int m_EnemyCount;
+
 private:
 	bool m_isGravityAffected;
+
 
 };
