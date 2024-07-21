@@ -99,3 +99,9 @@ void ATiSnowBall::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimiti
 		m_bIsOnFloor = true;
 	}
 }
+
+
+void ATiSnowBall::DestroyProjectile()
+{
+
+}

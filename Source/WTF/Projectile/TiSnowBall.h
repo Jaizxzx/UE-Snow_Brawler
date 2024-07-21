@@ -33,12 +33,15 @@ public:
 	
 	virtual void AdjustPositionAfterScaling(const FVector& OldScale, const FVector& NewScale);
 
+
+	virtual void DestroyProjectile() override;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Scaling")
 	float m_ScaleMultiplier;
 
 	UPROPERTY(EditAnywhere)
-		float m_minSpeedForScaling = 20.0f;
+	float m_minSpeedForScaling = 20.0f;
 
 	UPROPERTY(EditAnywhere)
 	float m_maxScale= 4.0f;
